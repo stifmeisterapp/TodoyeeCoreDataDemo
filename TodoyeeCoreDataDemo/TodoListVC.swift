@@ -11,7 +11,8 @@ import UIKit
 class TodoListVC: UITableViewController {
     
     //MARK:- VARIABLES
-    let itemArray = ["Joe","Mike","Harold","Jeff","Hefner"]
+    //MARK:
+    var itemArray = ["Joe","Mike","Harold","Jeff","Hefner"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,31 @@ class TodoListVC: UITableViewController {
         tableView.dataSource = self
         tableView.reloadData()
     }
+    
+    //MARK:- ACTIONS
+    //MARK:
+    
+    @IBAction func addBtnTapped(_ sender: Any) {
+    
+         var textFeild = UITextField()
+    
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            self.itemArray.append(textFeild.text!)
+            self.tableView.reloadData()
+    
+        }
+        alert.addTextField { (alertTextFeild) in
+            alertTextFeild.placeholder = "Create new item"
+            textFeild = alertTextFeild
+        }
+        alert.addAction(action)
+
+       present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
     
     
     //MARK:- TABLEVIEW DATA SOURCE AND DELEGATES METHODS
