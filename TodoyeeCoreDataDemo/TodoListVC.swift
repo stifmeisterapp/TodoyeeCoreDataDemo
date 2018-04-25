@@ -23,6 +23,9 @@ class TodoListVC: UITableViewController {
     //MARK:- METHODS
     //MARK:
     func initialSetup(){
+        if let items = UserDefaults.standard.value(forKey: "ITEM_ARRAY") as? [String]{
+            itemArray = items
+        }
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
@@ -38,6 +41,7 @@ class TodoListVC: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             self.itemArray.append(textFeild.text!)
+            UserDefaults.standard.set(self.itemArray, forKey: "ITEM_ARRAY")
             self.tableView.reloadData()
     
         }
