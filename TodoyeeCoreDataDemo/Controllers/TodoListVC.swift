@@ -12,8 +12,7 @@ class TodoListVC: UITableViewController {
     
     //MARK:- VARIABLES
     //MARK:
-    var itemArray = ["Joe","Mike","Harold","Jeff","Hefner"]
-
+    var itemArray = [Item]()
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
@@ -23,7 +22,26 @@ class TodoListVC: UITableViewController {
     //MARK:- METHODS
     //MARK:
     func initialSetup(){
-        if let items = UserDefaults.standard.value(forKey: "ITEM_ARRAY") as? [String]{
+        let item1 = Item()
+        item1.title = "Joe"
+        itemArray.append(item1)
+        
+        let item2 = Item()
+        item2.title = "Rob"
+        itemArray.append(item2)
+        
+        let item3 = Item()
+        item3.title = "Harry"
+        itemArray.append(item3)
+        
+        let item4 = Item()
+        item4.title = "Jim"
+        itemArray.append(item4)
+        
+        let item5 = Item()
+        item5.title = "Jules"
+        itemArray.append(item5)
+        if let items = UserDefaults.standard.value(forKey: "ITEM_ARRAY") as? [Item]{
             itemArray = items
         }
         tableView.delegate = self
@@ -40,7 +58,9 @@ class TodoListVC: UITableViewController {
     
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            self.itemArray.append(textFeild.text!)
+            let newItem = Item()
+            newItem.title = textFeild.text!
+            self.itemArray.append(newItem)
             UserDefaults.standard.set(self.itemArray, forKey: "ITEM_ARRAY")
             self.tableView.reloadData()
     
@@ -68,18 +88,15 @@ class TodoListVC: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell")
-        cell?.textLabel?.text = itemArray[indexPath.row]
+        cell?.textLabel?.text = itemArray[indexPath.row].title
+        cell?.accessoryType = itemArray[indexPath.row].done ? .checkmark : .none
         return cell!
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+   
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }
-        else{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            
-        }
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
